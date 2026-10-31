@@ -1,0 +1,14 @@
+# GLOBAL FINANCIAL CORP: TRANSACTION COMPLIANCE & AML POLICY (2026)
+
+## SECTION 1: WIRE TRANSFER REPORTING THRESHOLDS
+All domestic wire transfers exceeding 50,000 USD (or equivalent foreign currency) must be reported to the Financial Intelligence Unit (FIU) within 24 hours of execution. For international wire transfers, the mandatory reporting threshold is lowered to 10,000 USD. Any series of structured transactions occurring within a 48-hour rolling window that collectively exceeds 10,000 USD must be flagged as potential 'smurfing' or structuring.
+
+## SECTION 2: SANCTIONED JURISDICTIONS & SHELL ENTITIES
+Direct or intermediary transactions involving entities incorporated in Tier-3 high-risk jurisdictions, including unverified offshore registries (such as Vanuatu, Cayman Islands, and Seychelles shell companies with anonymous beneficial ownership), are strictly prohibited. Compliance officers must reject wire requests lacking verifiable Ultimate Beneficial Owner (UBO) documentation and freeze funds pending audit.
+
+## SECTION 3: CUSTOMER DUE DILIGENCE (KYC VERIFICATION)
+Individual accounts require primary government identification (Aadhaar, Passport, or National Identity Card) along with biometric verification prior to transaction activation. Corporate accounts require Certificate of Incorporation, Memorandum of Association, and tax identification numbers for all directors holding greater than 15 percent equity. Accounts with expired documentation are restricted to deposit-only status.
+
+## SECTION 4: VELOCITY CHECKS & ANOMALY DETECTION
+Our automated streaming audit worker continuously inspects transaction velocity. If an individual account initiates more than 5 distinct fund transfers within a 10-minute window, or if a transaction originates from an unrecognized IP address with a geolocation shift exceeding 500 kilometers in under 1 hour, the system triggers an immediate Level-2 security challenge and halts automated clearing.
+
