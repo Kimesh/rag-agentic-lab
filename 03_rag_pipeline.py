@@ -88,33 +88,27 @@ def retrieve_top_k(query: str, top_k: int = 2) -> list:
     return scored[:top_k]
 
 # ==============================================================================
-# 2. LLM GENERATION CALL
+# 2. LLM GENERATION CALL (IN-HOUSE LOCAL LLAMA 3.2)
 # ==============================================================================
 def call_llm(prompt: str) -> str:
-    """Calls Google Generative AI with automatic retry and model fallback."""
-    import time
-    for attempt in range(2):
-        for model_name in GENERATION_MODELS:
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={GEMINI_API_KEY}"
-            payload = {
-                "contents": [{"parts": [{"text": prompt}]}]
-            }
-            req = urllib.request.Request(
-                url,
-                data=json.dumps(payload).encode("utf-8"),
-                headers={"Content-Type": "application/json"}
-            )
-            try:
-                with urllib.request.urlopen(req, timeout=30) as response:
-                    result = json.loads(response.read().decode("utf-8"))
-                    text = result["candidates"][0]["content"]["parts"][0]["text"].strip()
-                    # If model returned chain-of-thought lines, extract the final conclusion
-                    return text
-            except Exception:
-                time.sleep(1)
-                continue
-
-    return "[ERROR] Unable to reach LLM generation service."
+    """Calls local In-House Llama 3.2 model via OpenAI-compatible endpoint."""
+    url = "http://localhost:11434/v1/chat/completions"
+    payload = {
+        "model": "llama3.2:1b",
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.0
+    }
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"}
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=60) as response:
+            result = json.loads(response.read().decode("utf-8"))
+            return result["choices"][0]["message"]["content"].strip()
+    except Exception as e:
+        return f"[ERROR] Failed to query local model: {e}"
 
 # ==============================================================================
 # 3. THE COMPLETE RAG PIPELINE
@@ -136,12 +130,8 @@ def run_rag_pipeline(user_query: str):
     # STEP B: PROMPT AUGMENTATION (Injecting context + anti-hallucination rules)
     print("\n[STEP 2: AUGMENTATION] Constructing grounded prompt with strict constraints...")
     augmented_prompt = f"""You are a Senior Financial Compliance AI Auditor at Global Financial Corp.
-Answer the user's question using ONLY the provided policy context below.
-
-STRICT COMPLIANCE RULES:
-1. Base your answer strictly on the facts directly mentioned in the Context.
-2. If the context does not contain enough information to answer the question, state: "The provided compliance policy documentation does not contain information to answer this inquiry." Do NOT attempt to guess or invent details.
-3. Explicitly cite the specific policy sections, dollar thresholds, or hour windows mentioned in the context.
+Answer the question based on the policy context provided below. Be concise and cite specific sections or dollar thresholds if present.
+If the context does not contain information to answer the question, state: "The provided compliance policy documentation does not contain information to answer this inquiry."
 
 --- CONTEXT START ---
 {context_text}
@@ -152,7 +142,7 @@ Question: {user_query}
 Audit Response:"""
 
     # STEP C: GENERATION
-    print("\n[STEP 3: GENERATION] Sending augmented prompt to Google LLM...")
+    print("\n[STEP 3: GENERATION] Sending augmented prompt to In-House Local Llama 3.2...")
     llm_response = call_llm(augmented_prompt)
 
     print("\n" + "-" * 75)
