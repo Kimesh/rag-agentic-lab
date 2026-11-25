@@ -51,6 +51,9 @@ flowchart TD
 | [`03_rag_pipeline.py`](03_rag_pipeline.py) | **Grounded RAG Pipeline** | Context injection, deterministic grounding, and zero-hallucination verification using local in-house **Llama 3.2**. |
 | [`04_agentic_tools.py`](04_agentic_tools.py) | **Autonomous ReAct Agent** | Dynamic Tool-Calling state machine (SQL account lookups, policy verification, automated freeze action). |
 | [`05_inference_benchmark.py`](05_inference_benchmark.py) | **Inference Profiling** | Client-side telemetry measuring **TTFT (Time To First Token)**, **TPOT**, **TPS**, and concurrency queue bottlenecks. |
+| [`06_structured_tool_calling.py`](06_structured_tool_calling.py) | **Native Tool Calling & Pydantic** | Enterprise-grade OpenAPI function declarations (`functionDeclarations`), Pydantic v2 argument/output validation, and deterministic zero-temperature grounding. |
+| [`07_langgraph_agent.py`](07_langgraph_agent.py) | **LangGraph State Workflows** | Cyclical state machines (`StateGraph`), LangChain `@tool` binding, MemorySaver checkpointer persistence, and `with_structured_output()` Pydantic parsing. |
+| [`08_llamaindex_rag.py`](08_llamaindex_rag.py) | **LlamaIndex RAG Engine** | Automated directory ingestion (`SimpleDirectoryReader`), `SentenceSplitter` chunking, `VectorStoreIndex` persistence, and cited source-node retrieval. |
 
 ---
 
